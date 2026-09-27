@@ -1,0 +1,16 @@
+# Build output
+target/
+*.war
+*.class
+
+# Project export
+PROG/Proyecto_PayToWin.zip
+
+# IDE
+nbproject/private/
+.idea/
+.vscode/
+*.iml
+
+# Local secrets
+.env
