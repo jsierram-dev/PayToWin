@@ -13,10 +13,9 @@ import org.apache.tomcat.jdbc.pool.PoolProperties;
  */
 public class Conexion {
     private static Conexion instancia = null;
-    private static final String URL = "jdbc:oracle:thin:@localhost:1521:ORCLCDB";
     private final DataSource datasource;
     private final PoolProperties pool;
-    
+
     public static Conexion getConexion(){
         if(instancia == null) instancia = new Conexion();
         return instancia;
@@ -24,21 +23,34 @@ public class Conexion {
 
     private Conexion() {
         pool = new PoolProperties();
-        pool.setUrl(URL);
+        // Credenciales desde variables de entorno (nunca en el código)
+        pool.setUrl(env("DB_URL"));
         pool.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        pool.setUsername("alumno");
-        pool.setPassword("alumno");
+        pool.setUsername(env("DB_USER"));
+        pool.setPassword(env("DB_PASSWORD"));
         pool.setMaxActive(15);
         pool.setMaxIdle(10);
         pool.setMaxWait(5000);
+        // Oracle Cloud cierra las conexiones inactivas: se validan antes de usarlas
+        pool.setTestOnBorrow(true);
+        pool.setValidationQuery("SELECT 1 FROM DUAL");
+        pool.setValidationInterval(30000);
         datasource = new DataSource();
         datasource.setPoolProperties(pool);
+    }
+
+    private static String env(String nombre) {
+        String valor = System.getenv(nombre);
+        if (valor == null || valor.isEmpty()) {
+            throw new IllegalStateException("Falta la variable de entorno " + nombre);
+        }
+        return valor;
     }
 
     public DataSource getDatasource() {
         return datasource;
     }
-    
-    
-    
+
+
+
 }
