@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -77,7 +78,7 @@ public class UsuarioDAO extends TablaDAO<Usuario> {
     
     public Usuario eliminar(String usuario) throws SQLException {
         Usuario aux = this.getByUsuario(usuario);
-        String sentenciaSQL = "DELETE FROM " + tabla + " WHERE nombreUsuario like ?";
+        String sentenciaSQL = "DELETE FROM " + tabla + " WHERE nombreUsuario = ?";
         PreparedStatement prepared = getPrepared(sentenciaSQL);
         prepared.setString(1, usuario);
         prepared.executeUpdate();
@@ -127,7 +128,7 @@ public class UsuarioDAO extends TablaDAO<Usuario> {
     }
     
     public Usuario getByUsuario(String usuario) throws SQLException {
-        String sentenciaSQL = "SELECT * FROM " + tabla + " WHERE nombreUsuario like ?";
+        String sentenciaSQL = "SELECT * FROM " + tabla + " WHERE nombreUsuario = ?";
         PreparedStatement prepared = getPrepared(sentenciaSQL);
         prepared.setString(1, usuario);
         ResultSet resultSet = prepared.executeQuery();
@@ -159,12 +160,16 @@ public class UsuarioDAO extends TablaDAO<Usuario> {
     }
     
     public Usuario getUsuario(String nombreUsuario, String contrasenya) throws SQLException{
-        String sentenciaSQL = "SELECT * FROM " + tabla + " WHERE nombreUsuario=? and passw like ?";
+        // Se busca solo por usuario y la contraseña se comprueba contra el hash BCrypt guardado
+        String sentenciaSQL = "SELECT * FROM " + tabla + " WHERE nombreUsuario = ?";
         PreparedStatement prepared = getPrepared(sentenciaSQL);
         prepared.setString(1, nombreUsuario);
-        prepared.setString(2, contrasenya);
         ResultSet resultSet = prepared.executeQuery();
         while (resultSet.next()) {
+            String hash = resultSet.getString("passw");
+            if (contrasenya == null || !passwordCorrecta(contrasenya, hash)) {
+                return null;
+            }
             String nombreCompleto = resultSet.getString("nombreReal");
             String email = resultSet.getString("correo");
             LocalDate fechaNacimiento = resultSet.getDate("fnac").toLocalDate();
@@ -184,10 +189,19 @@ public class UsuarioDAO extends TablaDAO<Usuario> {
             String fotoTS = resultSet.getString("foto");
             String foto = fotoTS == null ? null : fotoTS;
             
-            return new Usuario(nombreUsuario, nombreCompleto, email, contrasenya, fechaNacimiento, telefono, ultimaConexion, foto, tipoUsuario);
+            return new Usuario(nombreUsuario, nombreCompleto, email, hash, fechaNacimiento, telefono, ultimaConexion, foto, tipoUsuario);
         }
-        
+
         return null;
+    }
+
+    private static boolean passwordCorrecta(String contrasenya, String hash) {
+        try {
+            return hash != null && BCrypt.checkpw(contrasenya, hash);
+        } catch (IllegalArgumentException ex) {
+            // El valor guardado no es un hash BCrypt válido
+            return false;
+        }
     }
     
     //MI USUARIO NO TIENE CODIGO ASI QUE TENEMOS GETBYUSUARIO
@@ -214,7 +228,7 @@ public class UsuarioDAO extends TablaDAO<Usuario> {
     
     public ArrayList<Direccion> getDirecciones(String nombreUsuario) throws SQLException{
         ArrayList<Direccion> lista = new ArrayList<>();
-        String sentenciaSQL = "SELECT d.* FROM PROYECTO_direccion d LEFT JOIN PROYECTO_usuario u on u.nombreUsuario like d.usuario where d.usuario like ?";
+        String sentenciaSQL = "SELECT d.* FROM PROYECTO_direccion d LEFT JOIN PROYECTO_usuario u on u.nombreUsuario = d.usuario where d.usuario = ?";
         PreparedStatement prepared = getPrepared(sentenciaSQL);
         prepared.setString(1, nombreUsuario);
         ResultSet resultSet = prepared.executeQuery();

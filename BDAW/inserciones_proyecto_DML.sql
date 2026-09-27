@@ -8,15 +8,15 @@ Curso: 1ºDAW
 
 --Inserción de contenido de la tabla PROYECTO_usuario--
 ----------------------------------------------------------
-insert into PROYECTO_usuario values ('JScorpioDv', 'Juan Pablo', 'juanpablo@gmail.com', 'root', to_date('02/06/2002','DD/MM/YYYY'), 781235946, to_date('06/02/2023','DD/MM/YYYY'), 'Admin', null);
+insert into PROYECTO_usuario values ('JScorpioDv', 'Juan Pablo', 'juanpablo@gmail.com', '$2a$10$rcSB0f1oySK5kHF0T5r2zOsp4sgPQ/cgh58Fqz0m6UQHNbDvgY652', to_date('02/06/2002','DD/MM/YYYY'), 781235946, to_date('06/02/2023','DD/MM/YYYY'), 'Admin', null);
 
-insert into PROYECTO_usuario values ('ElTerceroDelMundo', 'Chema', 'chema@gmail.com', 'usuario', to_date('09/11/2005','DD/MM/YYYY'), 632542874, null, 'Cliente', null);
+insert into PROYECTO_usuario values ('ElTerceroDelMundo', 'Chema', 'chema@gmail.com', '$2a$10$d6OuxpPrmR1GlgRRkbN68ur5EBQc/ncAb73ZysXmNfO7Y66WxHyKq', to_date('09/11/2005','DD/MM/YYYY'), 632542874, null, 'Cliente', null);
 
-insert into PROYECTO_usuario values ('LaVillenera', 'Diana', 'diana@gmail.com', 'usuario', to_date('15/07/1999','DD/MM/YYYY'), 642587139, null, 'Cliente', null);
+insert into PROYECTO_usuario values ('LaVillenera', 'Diana', 'diana@gmail.com', '$2a$10$d6OuxpPrmR1GlgRRkbN68ur5EBQc/ncAb73ZysXmNfO7Y66WxHyKq', to_date('15/07/1999','DD/MM/YYYY'), 642587139, null, 'Cliente', null);
 
-insert into PROYECTO_usuario values ('BrunoyLuis', 'Pedro', 'pedro@gmail.com', 'usuario', to_date('07/09/1979','DD/MM/YYYY'), 743923415, null, 'Cliente', null);
+insert into PROYECTO_usuario values ('BrunoyLuis', 'Pedro', 'pedro@gmail.com', '$2a$10$d6OuxpPrmR1GlgRRkbN68ur5EBQc/ncAb73ZysXmNfO7Y66WxHyKq', to_date('07/09/1979','DD/MM/YYYY'), 743923415, null, 'Cliente', null);
 
-insert into PROYECTO_usuario values ('Lenna', 'Silvia', 'silvia@gmail.com', 'usuario', to_date('12/10/2003','DD/MM/YYYY'), 651238549, null, 'Cliente', null);
+insert into PROYECTO_usuario values ('Lenna', 'Silvia', 'silvia@gmail.com', '$2a$10$d6OuxpPrmR1GlgRRkbN68ur5EBQc/ncAb73ZysXmNfO7Y66WxHyKq', to_date('12/10/2003','DD/MM/YYYY'), 651238549, null, 'Cliente', null);
 
 
 --Inserción de contenido de la tabla PROYECTO_direccion--

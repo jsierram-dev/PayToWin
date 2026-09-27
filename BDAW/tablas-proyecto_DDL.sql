@@ -13,7 +13,7 @@ create table PROYECTO_usuario (
     nombreUsuario varchar2(30) primary key not null,
     nombreReal varchar2(40) not null,
     correo varchar2(100) unique not null,
-    passw varchar2(30) not null,
+    passw varchar2(60) not null,
     fnac date not null, 
     tel number(13), --OPCIONAL
     ultconex date, --OPCIONAL
