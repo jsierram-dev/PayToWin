@@ -21,10 +21,6 @@
         <servlet-class>Servlets.ExportarPDF</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Prueba1</servlet-name>
-        <servlet-class>Servlets.Prueba1</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>AnyadirAlCarrito</servlet-name>
         <servlet-class>Servlets.AnyadirAlCarrito</servlet-class>
     </servlet>
@@ -67,10 +63,6 @@
     <servlet-mapping>
         <servlet-name>ExportarPDF</servlet-name>
         <url-pattern>/ExportarPDF</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Prueba1</servlet-name>
-        <url-pattern>/Prueba1</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AnyadirAlCarrito</servlet-name>

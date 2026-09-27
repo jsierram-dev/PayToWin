@@ -192,7 +192,7 @@ public class ExportarPDF extends HttpServlet {
             System.out.println("Your PDF file has been generated!(¡Se ha generado tu hoja PDF!");
 
         } catch (DocumentException ex) {
-            Logger.getLogger(Prueba1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExportarPDF.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
