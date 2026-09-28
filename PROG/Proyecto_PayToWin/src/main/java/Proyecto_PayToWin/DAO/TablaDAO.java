@@ -45,7 +45,7 @@ public abstract class TablaDAO<T> implements MetodosFijos<T> {
 
     public PreparedStatement getPrepared(String sql) throws SQLException {
         try {
-            Class.forName("oracle.jdbc.OracleDriver");
+            Class.forName("org.h2.Driver");
             try (Connection conn = datasource.getConnection()) {
                 return conn.prepareStatement(sql);
             }
@@ -60,7 +60,7 @@ public abstract class TablaDAO<T> implements MetodosFijos<T> {
         int ultimo = 0;
         String sentenciaSQL = "SELECT codigo FROM " + tabla;
         try {
-            Class.forName("oracle.jdbc.OracleDriver");
+            Class.forName("org.h2.Driver");
             try (Connection conn = datasource.getConnection()) {
                 try (Statement statement = conn.createStatement()) {
                     try (ResultSet resultSet = statement.executeQuery(sentenciaSQL)) {

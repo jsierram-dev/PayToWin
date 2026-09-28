@@ -185,7 +185,10 @@ public class PedidoDAO extends TablaDAO<Pedido> {
         String sentenciaSQL = "SELECT * FROM PROYECTO_factura WHERE pedido=?";
         PreparedStatement prepared = getPrepared(sentenciaSQL);
         prepared.setInt(1, codpedido);
-        return prepared.executeUpdate() != 0;
+        // H2 no permite executeUpdate con un SELECT (Oracle sí lo toleraba)
+        try (ResultSet resultSet = prepared.executeQuery()) {
+            return resultSet.next();
+        }
 
     }
     

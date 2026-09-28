@@ -4,6 +4,9 @@
  */
 package Proyecto_PayToWin.DAO;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
@@ -16,35 +19,35 @@ public class Conexion {
     private final DataSource datasource;
     private final PoolProperties pool;
 
-    public static Conexion getConexion(){
+    public static synchronized Conexion getConexion(){
         if(instancia == null) instancia = new Conexion();
         return instancia;
     }
 
     private Conexion() {
         pool = new PoolProperties();
-        // Credenciales desde variables de entorno (nunca en el código)
-        pool.setUrl(env("DB_URL"));
-        pool.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        pool.setUsername(env("DB_USER"));
-        pool.setPassword(env("DB_PASSWORD"));
+        // Demo: H2 en memoria en modo Oracle. Vive mientras la app esté arrancada
+        // y se recarga desde los scripts (copia de BDAW/) en cada arranque.
+        pool.setUrl("jdbc:h2:mem:paytowin;MODE=Oracle;DB_CLOSE_DELAY=-1");
+        pool.setDriverClassName("org.h2.Driver");
+        pool.setUsername("sa");
+        pool.setPassword("");
         pool.setMaxActive(15);
         pool.setMaxIdle(10);
         pool.setMaxWait(5000);
-        // Oracle Cloud cierra las conexiones inactivas: se validan antes de usarlas
-        pool.setTestOnBorrow(true);
-        pool.setValidationQuery("SELECT 1 FROM DUAL");
-        pool.setValidationInterval(30000);
         datasource = new DataSource();
         datasource.setPoolProperties(pool);
+        cargarDatos();
     }
 
-    private static String env(String nombre) {
-        String valor = System.getenv(nombre);
-        if (valor == null || valor.isEmpty()) {
-            throw new IllegalStateException("Falta la variable de entorno " + nombre);
+    private void cargarDatos() {
+        try (Connection conn = datasource.getConnection();
+             Statement st = conn.createStatement()) {
+            st.execute("RUNSCRIPT FROM 'classpath:/db/tablas.sql' CHARSET 'UTF-8'");
+            st.execute("RUNSCRIPT FROM 'classpath:/db/inserciones.sql' CHARSET 'UTF-8'");
+        } catch (SQLException ex) {
+            throw new IllegalStateException("No se pudo cargar la base de datos de la demo", ex);
         }
-        return valor;
     }
 
     public DataSource getDatasource() {
